@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import re
+import os
 
 # 1. إعدادات الصفحة والثيم الاحترافي الفاخر
 st.set_page_config(page_title="بوابة الأداء الرقمية", page_icon="🎯", layout="centered")
@@ -15,6 +16,13 @@ st.markdown("""
         font-family: 'Cairo', sans-serif !important;
         text-align: right !important;
         direction: rtl !important;
+    }
+    
+    /* تنسيق الصورة اللوجو لتكون في المنتصف */
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
     }
     
     /* تكبير عناوين المدخلات ليراها الموظف بوضوح */
@@ -35,10 +43,7 @@ st.markdown("""
         color: #ffffff !important;
         border: 2px solid #334155 !important;
     }
-    .stTextInput div div input:focus {
-        border-color: #3b82f6 !important;
-    }
-
+    
     /* تصميم بطاقة التارجت الفاخرة */
     .stMetric {
         background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
@@ -48,14 +53,12 @@ st.markdown("""
         box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3) !important;
         text-align: center !important;
     }
-    /* اسم التارجت فوق الرقم */
     div[data-testid="stMetricLabel"] > div {
         font-size: 22px !important;
         font-weight: 700 !important;
         color: #94a3b8 !important;
         justify-content: center !important;
     }
-    /* رقم النسبة المئوية الكبير جداً */
     div[data-testid="stMetricValue"] {
         color: #3b82f6 !important;
         font-size: 65px !important;
@@ -74,34 +77,16 @@ st.markdown("""
         font-size: 20px !important;
         font-weight: 800 !important;
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
-        transition: all 0.3s ease !important;
-    }
-    .stButton>button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5) !important;
     }
     
-    /* زر الخروج بلون مختلف ومميز */
-    .logout-btn button {
-        background: #ef4444 !important;
-    }
-
     /* تحسين شكل شريط التقدم */
     .stProgress > div > div > div > div {
         background: linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%) !important;
         height: 16px !important;
-        border-radius: 10px !important;
     }
     .stProgress > div > div {
         height: 16px !important;
-        border-radius: 10px !important;
         background-color: #334155 !important;
-    }
-    
-    /* تكبير نصوص التنبيهات والرسائل */
-    .stAlert p {
-        font-size: 18px !important;
-        font-weight: 600 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -122,7 +107,6 @@ def load_data_from_sheets(url):
         df['Password'] = df['Password'].astype(str)
         return df
     except Exception:
-        st.error("❌ فشل جلب البيانات من السيرفر.")
         return None
 
 df_employees = load_data_from_sheets(GOOGLE_SHEET_URL)
@@ -134,8 +118,12 @@ if "logged_in" not in st.session_state:
 # --- صفحة الدخول الاحترافية ---
 if not st.session_state.logged_in:
     st.write("")
-    st.write("")
-    st.markdown("<h1 style='text-align: center; color: #ffffff; font-weight: 800; font-size: 38px;'>🎯 نظام متابعة الأداء</h1>", unsafe_allow_html=True)
+    
+    # عرض اللوجو في المنتصف إذا كان موجوداً
+    if os.path.exists("logo.png"):
+        st.image("logo.png", width=150)
+        
+    st.markdown("<h1 style='text-align: center; color: #ffffff; font-weight: 800; font-size: 34px;'>🎯 نظام متابعة الأداء</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 18px; margin-bottom: 30px;'>سجل دخولك الآن لمتابعة المستهدف الحالي</p>", unsafe_allow_html=True)
     
     with st.container():
@@ -158,27 +146,31 @@ else:
     user = st.session_state.user_data
     target_val = float(user['Target'])
     
-    # هيدر الصفحة والترحيب
-    st.write("")
-    st.markdown(f"<h2 style='text-align: right; color: #ffffff; font-weight: 800; font-size: 32px;'>👋 أهلاً، {user['Name']}</h2>", unsafe_allow_html=True)
-    st.markdown(f"<p style='text-align: right; color: #94a3b8; font-size: 18px;'>الرقم الوظيفي: {user['ID']}</p>", unsafe_allow_html=True)
+    # عرض اللوجو فوق في صفحة الموظف أيضاً بشكل صغير وجانبي
+    col_emp, col_lg = st.columns([3, 1])
+    with col_emp:
+        st.markdown(f"<h2 style='text-align: right; color: #ffffff; font-weight: 800; font-size: 30px;'>👋 أهلاً، {user['Name']}</h2>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: right; color: #94a3b8; font-size: 16px; margin: 0;'>الرقم الوظيفي: {user['ID']}</p>", unsafe_allow_html=True)
+    with col_lg:
+        if os.path.exists("logo.png"):
+            st.image("logo.png", width=80)
+
     st.markdown("<div style='height: 2px; background-color: #334155; margin: 20px 0;'></div>", unsafe_allow_html=True)
     
     # بطاقة التارجت
     st.metric(label="نسبة المستهدف المطلوب تحقيقها", value=f"{target_val}%")
     
-    # شريط التقدم (Progress Bar)
+    # شريط التقدم
     st.write("")
     progress_val = min(target_val / 100, 1.0)
     st.progress(progress_val)
     st.write("")
     
-    # رسالة تحفيزية ذكية مبنية على النسبة
     if target_val >= 100:
         st.success("🏆 أداء أسطوري! لقد قمت بتقفيل التارجت بالكامل لهذا الشهر.")
         st.balloons()
     elif target_val >= 80:
-        st.info("🚀 رائع جداً! أنت في الأمتار الأخيرة، تفصلك خطوات بسيطة على النجاح الكامل.")
+        st.info("🚀 رائع جداً! أنت في الأمتار الأخيرة، تفصلك خطوات بسيطة.")
     elif target_val >= 50:
         st.warning("💪 مجهود طيب! تجاوزت نصف الطريق، اضغط أكثر لتصل إلى القمة.")
     else:
@@ -186,7 +178,6 @@ else:
 
     st.markdown("<div style='height: 2px; background-color: #334155; margin: 35px 0;'></div>", unsafe_allow_html=True)
     
-    # زر الخروج بشكل مميز وأحمر
     if st.button("🏃 خروج بأمان"):
         st.session_state.logged_in = False
         st.rerun()
