@@ -2,49 +2,111 @@ import streamlit as st
 import pandas as pd
 import re
 
-# 1. إعدادات الصفحة والثيم الاحترافي
-st.set_page_config(page_title="بوابة التارجت 2.0", page_icon="🎯", layout="centered")
+# 1. إعدادات الصفحة والثيم الاحترافي الفاخر
+st.set_page_config(page_title="بوابة الأداء الرقمية", page_icon="🎯", layout="centered")
 
-# إضافة Custom CSS لتغيير شكل الموقع بالكامل
+# إضافة Custom CSS متقدم جداً لتحسين الخطوط والشكل على الموبايل
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
     
-    html, body, [class*="css"]  {
-        font-family: 'Cairo', sans-serif;
-        text-align: right;
-        direction: rtl;
+    /* ضبط الخط والاتجاه العام */
+    html, body, [class*="css"], .stMarkdown, p, span, label, input {
+        font-family: 'Cairo', sans-serif !important;
+        text-align: right !important;
+        direction: rtl !important;
     }
-    .main {
-        background-color: #0e1117;
+    
+    /* تكبير عناوين المدخلات ليراها الموظف بوضوح */
+    label[data-testid="stWidgetLabel"] p {
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        color: #e2e8f0 !important;
+        margin-bottom: 10px !important;
     }
+    
+    /* تكبير وتحسين حقول الإدخال لتناسب اللمس على الموبايل */
+    .stTextInput div div input {
+        font-size: 22px !important;
+        padding: 15px !important;
+        height: 55px !important;
+        border-radius: 12px !important;
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        border: 2px solid #334155 !important;
+    }
+    .stTextInput div div input:focus {
+        border-color: #3b82f6 !important;
+    }
+
+    /* تصميم بطاقة التارجت الفاخرة */
     .stMetric {
-        background-color: #1e293b;
-        padding: 20px;
-        border-radius: 15px;
-        border-bottom: 4px solid #3b82f6;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+        padding: 25px !important;
+        border-radius: 18px !important;
+        border: 1px solid #334155 !important;
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3) !important;
+        text-align: center !important;
     }
+    /* اسم التارجت فوق الرقم */
+    div[data-testid="stMetricLabel"] > div {
+        font-size: 22px !important;
+        font-weight: 700 !important;
+        color: #94a3b8 !important;
+        justify-content: center !important;
+    }
+    /* رقم النسبة المئوية الكبير جداً */
     div[data-testid="stMetricValue"] {
-        color: #60a5fa !important;
-        font-size: 50px !important;
+        color: #3b82f6 !important;
+        font-size: 65px !important;
+        font-weight: 800 !important;
+        margin-top: 10px !important;
     }
+    
+    /* تعديل تصميم الأزرار لتكون ضخمة وسهلة الضغط */
     .stButton>button {
-        width: 100%;
-        border-radius: 10px;
-        height: 3em;
-        background-color: #3b82f6;
-        color: white;
-        border: none;
-        font-weight: bold;
+        width: 100% !important;
+        border-radius: 14px !important;
+        height: 58px !important;
+        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%) !important;
+        color: white !important;
+        border: none !important;
+        font-size: 20px !important;
+        font-weight: 800 !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+        transition: all 0.3s ease !important;
     }
+    .stButton>button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5) !important;
+    }
+    
+    /* زر الخروج بلون مختلف ومميز */
+    .logout-btn button {
+        background: #ef4444 !important;
+    }
+
+    /* تحسين شكل شريط التقدم */
     .stProgress > div > div > div > div {
-        background-color: #60a5fa;
+        background: linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%) !important;
+        height: 16px !important;
+        border-radius: 10px !important;
+    }
+    .stProgress > div > div {
+        height: 16px !important;
+        border-radius: 10px !important;
+        background-color: #334155 !important;
+    }
+    
+    /* تكبير نصوص التنبيهات والرسائل */
+    .stAlert p {
+        font-size: 18px !important;
+        font-weight: 600 !important;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. رابط جوجل شيت
+# 2. رابط جوجل شيت الخاص بك
 GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/100B4icHqJA1oO2Zdu0KDHPn2ocXtkzUk/edit?usp=sharing&ouid=117906873751491807989&rtpof=true&sd=true"
 
 def load_data_from_sheets(url):
@@ -60,7 +122,7 @@ def load_data_from_sheets(url):
         df['Password'] = df['Password'].astype(str)
         return df
     except Exception:
-        st.error("❌ فشل الاتصال بالبيانات.. تأكد من صلاحية الرابط.")
+        st.error("❌ فشل جلب البيانات من السيرفر.")
         return None
 
 df_employees = load_data_from_sheets(GOOGLE_SHEET_URL)
@@ -69,16 +131,19 @@ if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
     st.session_state.user_data = None
 
-# --- صفحة الدخول ---
+# --- صفحة الدخول الاحترافية ---
 if not st.session_state.logged_in:
-    st.markdown("<h1 style='text-align: center; color: #60a5fa;'>🎯 بوابة التارجت الذكية</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #94a3b8;'>أهلاً بك في نظام متابعة الأداء المطور</p>", unsafe_allow_html=True)
+    st.write("")
+    st.write("")
+    st.markdown("<h1 style='text-align: center; color: #ffffff; font-weight: 800; font-size: 38px;'>🎯 نظام متابعة الأداء</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 18px; margin-bottom: 30px;'>سجل دخولك الآن لمتابعة المستهدف الحالي</p>", unsafe_allow_html=True)
     
     with st.container():
         user_id = st.text_input("🆔 الرقم الوظيفي:")
         password = st.text_input("🔑 كلمة المرور:", type="password")
         
-        if st.button("تسجيل الدخول"):
+        st.write("")
+        if st.button("دخول آمن للرصيد"):
             if df_employees is not None:
                 user_row = df_employees[(df_employees['ID'] == user_id) & (df_employees['Password'] == password)]
                 if not user_row.empty:
@@ -86,37 +151,42 @@ if not st.session_state.logged_in:
                     st.session_state.user_data = user_row.iloc[0]
                     st.rerun()
                 else:
-                    st.error("❌ البيانات غير صحيحة")
+                    st.error("❌ عذراً، الرقم الوظيفي أو كلمة المرور غير صحيحة.")
 
-# --- صفحة العرض ---
+# --- صفحة عرض التارجت للموظف ---
 else:
     user = st.session_state.user_data
     target_val = float(user['Target'])
     
-    # هيدر الصفحة
-    st.markdown(f"<h2 style='text-align: right; color: #f8fafc;'>👋 مرحباً، {user['Name']}</h2>", unsafe_allow_html=True)
+    # هيدر الصفحة والترحيب
+    st.write("")
+    st.markdown(f"<h2 style='text-align: right; color: #ffffff; font-weight: 800; font-size: 32px;'>👋 أهلاً، {user['Name']}</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align: right; color: #94a3b8; font-size: 18px;'>الرقم الوظيفي: {user['ID']}</p>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 2px; background-color: #334155; margin: 20px 0;'></div>", unsafe_allow_html=True)
     
     # بطاقة التارجت
-    st.markdown("---")
     st.metric(label="نسبة المستهدف المطلوب تحقيقها", value=f"{target_val}%")
     
     # شريط التقدم (Progress Bar)
     st.write("")
-    progress_val = min(target_val / 100, 1.0) # عشان ميعملش خطأ لو النسبة فوق 100
+    progress_val = min(target_val / 100, 1.0)
     st.progress(progress_val)
+    st.write("")
     
-    # رسالة تحفيزية ذكية
+    # رسالة تحفيزية ذكية مبنية على النسبة
     if target_val >= 100:
-        st.success("🏆 بطل! لقد حققت كامل التارجت بنجاح باهر.")
+        st.success("🏆 أداء أسطوري! لقد قمت بتقفيل التارجت بالكامل لهذا الشهر.")
         st.balloons()
     elif target_val >= 80:
-        st.info("🚀 رائع! أنت على وشك الوصول، استمر في الضغط.")
+        st.info("🚀 رائع جداً! أنت في الأمتار الأخيرة، تفصلك خطوات بسيطة على النجاح الكامل.")
     elif target_val >= 50:
-        st.warning("💪 مجهود جيد، النصف الثاني من الشهر يحتاج همة أكبر.")
+        st.warning("💪 مجهود طيب! تجاوزت نصف الطريق، اضغط أكثر لتصل إلى القمة.")
     else:
-        st.error("⚠️ نحتاج لتركيز أكبر في الفترة القادمة لتحسين النسبة.")
+        st.error("⚠️ بداية تحتاج إلى همّة أعلى! ركز جهودك في الأيام القادمة لتحسين النسبة.")
 
-    st.markdown("---")
-    if st.button("🏃 تسجيل الخروج"):
+    st.markdown("<div style='height: 2px; background-color: #334155; margin: 35px 0;'></div>", unsafe_allow_html=True)
+    
+    # زر الخروج بشكل مميز وأحمر
+    if st.button("🏃 خروج بأمان"):
         st.session_state.logged_in = False
         st.rerun()
