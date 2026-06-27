@@ -76,7 +76,7 @@ st.markdown("""
         color: #94a3b8 !important;
         justify-content: center !important;
     }
-    /* الرقم المئوي الضخم والواضح جداً */
+    /* الرقم المجرد الضخم والواضح جداً (بدون علامة %) */
     div[data-testid="stMetricValue"] {
         color: #60a5fa !important;
         font-size: 75px !important;
@@ -159,7 +159,7 @@ if not st.session_state.logged_in:
         with col_l2:
             st.image("logo.png", use_container_width=True)
         
-    st.markdown("<h1 style='text-align: center; color: #ffffff; font-weight: 900; font-size: 36px; margin-top: 15px;'>🎯 نظام متابعة الأداء</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #ffffff; font-weight: 900; size: 36px; margin-top: 15px;'>🎯 نظام متابعة الأداء</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #64748b; font-size: 18px; margin-bottom: 35px;'>سجل دخولك الآن لمتابعة المستهدف الحالي</p>", unsafe_allow_html=True)
     
     with st.container():
@@ -180,7 +180,8 @@ if not st.session_state.logged_in:
 # --- صفحة عرض التارجت للموظف ---
 else:
     user = st.session_state.user_data
-    target_val = float(user['Target'])
+    # تحويل القيمة برمجياً إلى رقم صحيح نقي لتجنب الكسور وعلامة الـ %
+    target_val = int(float(user['Target']))
     
     # تنسيق الهيدر العلوي بشكل متناسق جداً للموبايل مع اللوجو جانبياً
     col_emp, col_lg = st.columns([3.5, 1])
@@ -193,16 +194,16 @@ else:
 
     st.markdown("<div style='height: 2px; background-color: #1f2937; margin: 25px 0;'></div>", unsafe_allow_html=True)
     
-    # بطاقة التارجت النيون الجديدة
-    st.metric(label="نسبة المستهدف المطلوب تحقيقها", value=f"{target_val}%")
+    # بطاقة التارجت النيون الجديدة مع عرض الرقم الصحيح المجرد بدون علامة النسبة المئوية
+    st.metric(label="نسبة المستهدف المطلوب تحقيقها", value=f"{target_val}")
     
-    # شريط التقدم السميك
+    # شريط التقدم السميك (يأخذ القيمة مقسومة على 100 لتلوين الشريط بشكل صحيح)
     st.write("")
     progress_val = min(target_val / 100, 1.0)
     st.progress(progress_val)
     st.write("")
     
-    # رسائل التوجيه والتحفيز (بدون تغيير أي نص)
+    # رسائل التوجيه والتحفيز الذكية (تعتمد على الرقم)
     if target_val >= 100:
         st.success("🏆 أداء أسطوري! لقد قمت بتقفيل التارجت بالكامل لهذا الشهر.")
         st.balloons()
