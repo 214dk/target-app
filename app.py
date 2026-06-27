@@ -6,87 +6,116 @@ import os
 # 1. إعدادات الصفحة والثيم الاحترافي الفاخر
 st.set_page_config(page_title="بوابة الأداء الرقمية", page_icon="🎯", layout="centered")
 
-# إضافة Custom CSS متقدم جداً لتحسين الخطوط والشكل على الموبايل
+# إضافة Custom CSS فائق الاحترافية لتنسيق الألوان، الخطوط، وتوسيط اللوجو
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
     
-    /* ضبط الخط والاتجاه العام */
+    /* ضبط الخلفية العامة والخطوط */
     html, body, [class*="css"], .stMarkdown, p, span, label, input {
         font-family: 'Cairo', sans-serif !important;
         text-align: right !important;
         direction: rtl !important;
     }
     
-    /* تنسيق الصورة اللوجو لتكون في المنتصف */
-    .logo-container {
+    /* تهيئة وتوسيط حاوية اللوجو */
+    .logo-box {
         display: flex;
         justify-content: center;
-        margin-bottom: 20px;
+        align-items: center;
+        width: 100%;
+        margin: 20px auto 10px auto;
     }
-    
-    /* تكبير عناوين المدخلات ليراها الموظف بوضوح */
+    .logo-box img {
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* تكبير وتنسيق عناوين المدخلات لتكون مريحة للعين */
     label[data-testid="stWidgetLabel"] p {
-        font-size: 20px !important;
-        font-weight: 700 !important;
-        color: #e2e8f0 !important;
-        margin-bottom: 10px !important;
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        color: #94a3b8 !important;
+        margin-bottom: 8px !important;
     }
     
-    /* تكبير وتحسين حقول الإدخال لتناسب اللمس على الموبايل */
+    /* تصميم حقول الإدخال الاحترافي (المودرن) */
     .stTextInput div div input {
-        font-size: 22px !important;
-        padding: 15px !important;
-        height: 55px !important;
+        font-size: 20px !important;
+        padding: 12px 15px !important;
+        height: 54px !important;
         border-radius: 12px !important;
-        background-color: #1e293b !important;
+        background-color: #141b27 !important;
         color: #ffffff !important;
-        border: 2px solid #334155 !important;
+        border: 2px solid #232e42 !important;
+        transition: all 0.3s ease !important;
     }
-    
-    /* تصميم بطاقة التارجت الفاخرة */
+    .stTextInput div div input:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15) !important;
+    }
+
+    /* تصميم بطاقة التارجت الزجاجية الفاخرة */
     .stMetric {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
-        padding: 25px !important;
-        border-radius: 18px !important;
-        border: 1px solid #334155 !important;
-        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3) !important;
+        background: linear-gradient(145deg, #141b27 0%, #0d131f 100%) !important;
+        padding: 30px !important;
+        border-radius: 20px !important;
+        border: 1px solid #232e42 !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
         text-align: center !important;
     }
     div[data-testid="stMetricLabel"] > div {
-        font-size: 22px !important;
+        font-size: 20px !important;
         font-weight: 700 !important;
-        color: #94a3b8 !important;
+        color: #64748b !important;
         justify-content: center !important;
     }
     div[data-testid="stMetricValue"] {
         color: #3b82f6 !important;
-        font-size: 65px !important;
+        font-size: 70px !important;
         font-weight: 800 !important;
-        margin-top: 10px !important;
+        letter-spacing: -1px !important;
+        margin-top: 15px !important;
     }
     
-    /* تعديل تصميم الأزرار لتكون ضخمة وسهلة الضغط */
+    /* تصميم الأزرار الفخم والملس */
     .stButton>button {
         width: 100% !important;
         border-radius: 14px !important;
-        height: 58px !important;
-        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%) !important;
+        height: 56px !important;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
         color: white !important;
         border: none !important;
-        font-size: 20px !important;
-        font-weight: 800 !important;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+        font-size: 19px !important;
+        font-weight: 700 !important;
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25) !important;
+        transition: all 0.3s ease !important;
+    }
+    .stButton>button:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4) !important;
     }
     
-    /* تحسين شكل شريط التقدم */
+    /* تحسين وتنعيم شريط التقدم */
     .stProgress > div > div > div > div {
         background: linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%) !important;
-        height: 16px !important;
+        height: 14px !important;
+        border-radius: 20px !important;
     }
     .stProgress > div > div {
-        height: 16px !important;
-        background-color: #334155 !important;
+        height: 14px !important;
+        background-color: #1e293b !important;
+        border-radius: 20px !important;
+    }
+
+    /* تحسين مظهر رسائل التنبيه والنجاح */
+    .stAlert {
+        border-radius: 14px !important;
+        border: 1px solid rgba(255,255,255,0.05) !important;
+    }
+    .stAlert p {
+        font-size: 18px !important;
+        font-weight: 500 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -119,12 +148,14 @@ if "logged_in" not in st.session_state:
 if not st.session_state.logged_in:
     st.write("")
     
-    # عرض اللوجو في المنتصف إذا كان موجوداً
+    # عرض اللوجو متمركزاً ومحاذياً تماماً في المنتصف
     if os.path.exists("logo.png"):
-        st.image("logo.png", width=150)
+        col_l1, col_l2, col_l3 = st.columns([1, 1, 1])
+        with col_l2:
+            st.image("logo.png", use_container_width=True)
         
-    st.markdown("<h1 style='text-align: center; color: #ffffff; font-weight: 800; font-size: 34px;'>🎯 نظام متابعة الأداء</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #94a3b8; font-size: 18px; margin-bottom: 30px;'>سجل دخولك الآن لمتابعة المستهدف الحالي</p>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #ffffff; font-weight: 800; font-size: 34px; margin-top: 10px;'>🎯 نظام متابعة الأداء</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #64748b; font-size: 18px; margin-bottom: 30px;'>سجل دخولك الآن لمتابعة المستهدف الحالي</p>", unsafe_allow_html=True)
     
     with st.container():
         user_id = st.text_input("🆔 الرقم الوظيفي:")
@@ -146,26 +177,27 @@ else:
     user = st.session_state.user_data
     target_val = float(user['Target'])
     
-    # عرض اللوجو فوق في صفحة الموظف أيضاً بشكل صغير وجانبي
-    col_emp, col_lg = st.columns([3, 1])
+    # تنسيق راقي جداً لبيانات الموظف واللوجو بجانبه
+    col_emp, col_lg = st.columns([4, 1])
     with col_emp:
-        st.markdown(f"<h2 style='text-align: right; color: #ffffff; font-weight: 800; font-size: 30px;'>👋 أهلاً، {user['Name']}</h2>", unsafe_allow_html=True)
-        st.markdown(f"<p style='text-align: right; color: #94a3b8; font-size: 16px; margin: 0;'>الرقم الوظيفي: {user['ID']}</p>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='text-align: right; color: #ffffff; font-weight: 800; font-size: 30px; margin-bottom: 5px;'>👋 أهلاً، {user['Name']}</h2>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: right; color: #64748b; font-size: 16px; margin: 0;'>الرقم الوظيفي: {user['ID']}</p>", unsafe_allow_html=True)
     with col_lg:
         if os.path.exists("logo.png"):
-            st.image("logo.png", width=80)
+            st.image("logo.png", width=75)
 
-    st.markdown("<div style='height: 2px; background-color: #334155; margin: 20px 0;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 1px; background-color: #232e42; margin: 25px 0;'></div>", unsafe_allow_html=True)
     
-    # بطاقة التارجت
+    # بطاقة التارجت المحسنة بصرياً
     st.metric(label="نسبة المستهدف المطلوب تحقيقها", value=f"{target_val}%")
     
-    # شريط التقدم
+    # شريط التقدم الفاخر
     st.write("")
     progress_val = min(target_val / 100, 1.0)
     st.progress(progress_val)
     st.write("")
     
+    # الرسائل الذكية المبنية على النسبة دون تعديل في النصوص
     if target_val >= 100:
         st.success("🏆 أداء أسطوري! لقد قمت بتقفيل التارجت بالكامل لهذا الشهر.")
         st.balloons()
@@ -176,8 +208,9 @@ else:
     else:
         st.error("⚠️ بداية تحتاج إلى همّة أعلى! ركز جهودك في الأيام القادمة لتحسين النسبة.")
 
-    st.markdown("<div style='height: 2px; background-color: #334155; margin: 35px 0;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 1px; background-color: #232e42; margin: 35px 0;'></div>", unsafe_allow_html=True)
     
+    # تعديل بسيط في زر الخروج ليصبح بتصميم متناسق وراقٍ مع الواجهة الداكنة
     if st.button("🏃 خروج بأمان"):
         st.session_state.logged_in = False
         st.rerun()
